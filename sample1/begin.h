@@ -29,7 +29,7 @@ static void s1_sf_setd(S1State* s, OpExpr* o, Const* c){
 }
 
 static void s1_sf_setc(S1State* s, OpExpr* o, Const* c){
-  bool is_string = IsA(c, String);
+  bool is_string = 25 == c->consttype;
   for(; is_string;){
     const char* code = TextDatumGetCString(c->constvalue);
     strncpy(s->c.filter, code, 4);
@@ -81,6 +81,10 @@ static void s1_set_filter(S1State* f, const ScanState* s){
   }
 }
 
+static void s1b_ymdc(S1State* s){
+  s->file = AllocateFile(s->path, "rb");
+}
+
 static void s1_begin(ForeignScanState* f, int eflags){
   int  i = eflags & EXEC_FLAG_EXPLAIN_ONLY;
   bool explain_only = !! i;
@@ -99,6 +103,12 @@ static void s1_begin(ForeignScanState* f, int eflags){
       }
       break;
     }
+    switch(s->ptype){
+      case 15: s1b_ymdc(s); break;
+      default: break;
+    }
+    s->punixtime = (double*)s->buf;
+    s->prate     = s->punixtime+1;
     break;
   }
 }

@@ -6,16 +6,18 @@ CREATE FOREIGN TABLE IF NOT EXISTS t1(
   m SMALLINT, -- month;     MM
   d SMALLINT, -- day;       DD
   c TEXT,     -- currency;  USD,JPY,...
+  v FLOAT8,   -- rate;      103.19 yen/usd
   t FLOAT8    -- unixtime;  1609281603.4757745
 ) SERVER sv1 OPTIONS(
   rootdir '/path/to/root.d' -- /path/to/root.d/2020/12/30/JPY/rate.dat'
 );
 
-SELECT COUNT(*) FROM t1
+EXPLAIN ANALYZE VERBOSE SELECT y,m,d,c,v,t FROM t1
 WHERE
   y     = 2020::SMALLINT
   AND m =   12::SMALLINT
   AND d =   31::SMALLINT
+  AND c = 'JPY'::TEXT
 ;
 
 DROP FOREIGN TABLE t1;

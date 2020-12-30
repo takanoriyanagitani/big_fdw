@@ -33,6 +33,11 @@ typedef struct S1State {
   DIR*        root;
   char        path[PATH_MAX];
   int8_t      ptype;
+  FILE*       file;
+
+  uint8_t     buf[16]; // double unixtime, double rate
+  double*     punixtime;
+  double*     prate;
 
   year_t  y;
   month_t m;
@@ -40,6 +45,7 @@ typedef struct S1State {
   code_t  c;
 
   double unixtime;
+  double rate;
 } S1State;
 
 S1State* s1state_new(){
@@ -65,6 +71,16 @@ void s1state_clamp(S1State* s){
   day_t_clamp(&s->d);
 }
 
+void s1state_sp_ymdc(S1State* s){
+  snprintf(
+    s->path, PATH_MAX, "%s/%04d/%02d/%02d/%s",
+    s->root_dirname,
+    s->y.filter.value,
+    s->m.filter.value,
+    s->d.filter.value,
+    s->c.filter
+  );
+}
 void s1state_sp_ymd(S1State* s){
   snprintf(
     s->path, PATH_MAX, "%s/%04d/%02d/%02d",
@@ -100,11 +116,13 @@ void s1state_setpath(S1State* s){
   const bool y = ! s->y.filter.null;
   const bool m = ! s->m.filter.null;
   const bool d = ! s->d.filter.null;
-  s->ptype = 4*(y?1:0) + 2*(m?1:0) + (d?1:0);
+  const bool c = 3 == strnlen(s->c.filter, 3);
+  s->ptype = 8*(c?1:0) + 4*(y?1:0) + 2*(m?1:0) + (d?1:0);
   switch(s->ptype){
-    case 7:  s1state_sp_ymd(s); break;
-    case 6:  s1state_sp_ym(s);  break;
-    case 4:  s1state_sp_y(s);   break;
-    default: s1state_sp(s);     break;
+    case 15: s1state_sp_ymdc(s); break;
+    case  7: s1state_sp_ymd(s);  break;
+    case  6: s1state_sp_ym(s);   break;
+    case  4: s1state_sp_y(s);    break;
+    default: s1state_sp(s);      break;
   }
 }
