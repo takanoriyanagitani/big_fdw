@@ -12,12 +12,15 @@ CREATE FOREIGN TABLE IF NOT EXISTS t1(
   rootdir '/path/to/root.d' -- /path/to/root.d/2020/12/30/JPY/rate.dat'
 );
 
-EXPLAIN ANALYZE VERBOSE SELECT y,m,d,c,v,t FROM t1
-WHERE
-  y     = 2020::SMALLINT
-  AND m =   12::SMALLINT
-  AND d =   31::SMALLINT
-  AND c = 'JPY'::TEXT
+WITH t0 AS (
+  SELECT y,m,d,c,v,t FROM t1
+  WHERE
+    y     = 2020::SMALLINT
+    AND m =   12::SMALLINT
+    AND d =   31::SMALLINT
+    AND c = 'JPY'::TEXT
+)
+SELECT * FROM t0 LIMIT 1
 ;
 
 DROP FOREIGN TABLE t1;

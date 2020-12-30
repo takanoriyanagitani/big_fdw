@@ -17,16 +17,18 @@ static TupleTableSlot* s1i_ymdc(
     }
     Datum* v = slot->tts_values;
     bool*  n = slot->tts_isnull;
-    v[0] = Int16GetDatum(2020);
-    v[1] = Int16GetDatum(12);
-    v[2] = Int16GetDatum(31);
-    v[3] = PointerGetDatum(s->c.filter);
+    v[0] = Int16GetDatum(s->y.filter.value);
+    v[1] = Int16GetDatum(s->m.filter.value);
+    v[2] = Int16GetDatum(s->d.filter.value);
+    v[3] = code_topg(&s->c);
+    v[4] = Float8GetDatum(*s->prate);
+    v[5] = Float8GetDatum(*s->punixtime);
     n[0]=false;
     n[1]=false;
     n[2]=false;
     n[3]=false;
-    n[4]=true;
-    n[5]=true;
+    n[4]=false;
+    n[5]=false;
     ExecStoreVirtualTuple(slot);
     break;
   }
