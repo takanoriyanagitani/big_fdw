@@ -1,0 +1,4 @@
+comment = 'foreign-data wrapper for big data'
+default_version = '1.0'
+module_pathname = '$libdir/s1_fdw'
+relocatable = true
