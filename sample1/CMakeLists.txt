@@ -21,4 +21,5 @@ set_property(TARGET s1_fdw PROPERTY POSITION_INDEPENDENT_CODE ON)
 set_property(TARGET s1_fdw PROPERTY PREFIX "")
 target_include_directories(s1_fdw PRIVATE
   /usr/include/postgresql/12/server
+  ../common
 )

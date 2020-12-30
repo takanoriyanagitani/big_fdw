@@ -11,7 +11,12 @@ CREATE FOREIGN TABLE IF NOT EXISTS t1(
   rootdir '/path/to/root.d' -- /path/to/root.d/2020/12/30/JPY/rate.dat'
 );
 
---EXPLAIN ANALYZE VERBOSE SELECT * FROM bt WHERE d_type=4;
+SELECT COUNT(*) FROM t1
+WHERE
+  y     = 2020::SMALLINT
+  AND m =   12::SMALLINT
+  AND d =   31::SMALLINT
+;
 
 DROP FOREIGN TABLE t1;
 DROP SERVER        sv1;
