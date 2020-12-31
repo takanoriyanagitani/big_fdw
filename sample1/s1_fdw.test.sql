@@ -13,13 +13,19 @@ CREATE FOREIGN TABLE IF NOT EXISTS t1(
 );
 
 WITH t0 AS (
-  SELECT y,m,d,c,v,t FROM t1
+  WITH c0 AS (
+    SELECT
+      2020::SMALLINT AS cy,
+      12::SMALLINT   AS cm,
+      31::SMALLINT   AS cd,
+      'JPY'::TEXT    AS cc
+  )
+  SELECT y,m,d,c,v,t FROM t1, c0
   WHERE
-    y     =  2020::SMALLINT
-    AND m =    12::SMALLINT
-    AND d =    31::SMALLINT
-    AND c = 'JPY'::TEXT
-    --AND c = 'USD'::TEXT
+    y     = c0.cy
+    AND m = c0.cm
+    AND d = c0.cd
+    AND c = c0.cc
 )
 SELECT * FROM t0 LIMIT 1
 ;
