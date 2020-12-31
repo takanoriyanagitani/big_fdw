@@ -83,6 +83,13 @@ static void s1_set_filter(S1State* f, const ScanState* s){
 
 static void s1b_ymdc(S1State* s){
   s->file = AllocateFile(s->path, "rb");
+  switch(errno){
+    case 0:      return; // no error
+    case ENOENT: return; // no rows
+    default:     break;  // exception
+  }
+  const char* emsg = strerror(errno);
+  elog(ERROR, "Unable to open file: %s", emsg);
 }
 
 static void s1_begin(ForeignScanState* f, int eflags){

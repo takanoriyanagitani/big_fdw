@@ -15,10 +15,11 @@ CREATE FOREIGN TABLE IF NOT EXISTS t1(
 WITH t0 AS (
   SELECT y,m,d,c,v,t FROM t1
   WHERE
-    y     = 2020::SMALLINT
-    AND m =   12::SMALLINT
-    AND d =   31::SMALLINT
+    y     =  2020::SMALLINT
+    AND m =    12::SMALLINT
+    AND d =    31::SMALLINT
     AND c = 'JPY'::TEXT
+    --AND c = 'USD'::TEXT
 )
 SELECT * FROM t0 LIMIT 1
 ;
