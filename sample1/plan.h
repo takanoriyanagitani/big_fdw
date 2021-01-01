@@ -13,6 +13,10 @@ static ForeignScan* s1_plan(
   Plan*        plan
 ){
   s = extract_actual_clauses(s, false);
+  Query* q  = p->parse;
+  List*  sc = NULL == q ? NIL : q->sortClause;
+  ListCell* i = NULL;
+  foreach(i, sc){ elog(NOTICE, "sort found."); }
   return make_foreignscan(
     l,
     s,

@@ -12,6 +12,7 @@ CREATE FOREIGN TABLE IF NOT EXISTS t1(
   rootdir '/path/to/root.d' -- /path/to/root.d/2020/12/30/JPY/rate.dat'
 );
 
+--EXPLAIN ANALYZE VERBOSE
 WITH t0 AS (
   WITH c0 AS (
     SELECT
@@ -26,6 +27,7 @@ WITH t0 AS (
     AND m = c0.cm
     AND d = c0.cd
     AND c = c0.cc
+  ORDER BY y,m,d,c,t
 )
 SELECT * FROM t0 LIMIT 1
 ;
